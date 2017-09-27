@@ -6,13 +6,21 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
-@EnableGlobalMethodSecurity(prePostEnabled = true)
+@EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
+@EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+
+    @Autowired
+    private CustomAuthenticationSuccessHandler customHandler;
+
+    @Autowired
+    private CustomAuthenticationFailureHandler failureHandler;
 
     @Override
     public void configure(final HttpSecurity http) throws Exception {
@@ -23,7 +31,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/user/**").hasAuthority("USER")
                 .antMatchers("/static/**", "/", "/login").permitAll();
 
-        http.formLogin().loginPage("/login").permitAll();
+        http.formLogin().loginPage("/login").permitAll()
+                .successHandler(customHandler)
+                .failureHandler(failureHandler);
     }
 
     @Autowired
