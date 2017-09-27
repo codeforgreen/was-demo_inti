@@ -1,0 +1,99 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Web Application Security</title>
+
+    <div th:replace="fragments/header :: header-css"/>
+    <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.js"></script>
+    <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/additional-methods.min.js"></script>
+    <script>
+        $(function() {
+            $("#registerForm").validate({
+                rules: {
+                    email: {
+                        required: true,
+                        email: true
+                    },
+                    username: {
+                        required: true
+                    }
+                },
+                messages: {
+                    email: {
+                        required: "inserati mail",
+                        email: "email invalid"
+                    },
+                    username: {
+                        required: "inserati username"
+                    }
+                }
+            });
+        });
+    </script>
+</head>
+<body>
+
+<div th:replace="fragments/header :: header"/>
+
+<div class="container">
+
+    <div class="starter-template">
+        <h1>Registration</h1>
+
+        <div class="row" style="margin-top:20px">
+            <div class="col-xs-12 col-sm-12 col-md-6 col-sm-offset-2 col-md-offset-3">
+                <form id="registerForm" th:action="@{/register}" method="post" th:object="${account}">
+
+                    <div class="col-sm-12">
+                        <label class="col-sm-3" th:text="Username"></label>
+                        <div class="col-sm-6">
+                            <input type="text" class="col-sm-3 form-control" th:field="*{username}"/>
+                            <span class="text-danger" th:if="${#fields.hasErrors('username')}"
+                                  th:errors="*{username}"></span>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12">
+                        <label class="col-sm-3 control-label" th:text="Email"></label>
+                        <div class="col-sm-6">
+                            <input type="text" id="email" name="email" class="col-sm-3 form-control" th:field="*{email}"/>
+                            <span class="text-danger col-sm-3" th:if="${#fields.hasErrors('email')}"
+                                  th:errors="*{email}"></span>
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <label for="password" class="col-sm-3 control-label" th:text="Parola"></label>
+                        <div class="col-sm-6">
+                            <input id="password" type="password" class="form-control" th:field="*{password}"/>
+                            <span class="text-danger" th:if="${#fields.hasErrors('password')}"
+                                  th:errors="*{password}"></span>
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <label for="confirmedPassword" class="col-sm-3 control-label"
+                               th:text="Confirmati_parola"></label>
+                        <div class="col-sm-6">
+                            <input id="confirmedPassword" type="password" class="form-control"
+                                   th:field="*{confirmedPassword}"/>
+                            <span class="text-danger" th:if="${#fields.hasErrors('confirmedPassword')}"
+                                  th:errors="*{confirmedPassword}"></span>
+                            <span class="text-danger" th:if="${#fields.hasErrors('passwordStrengthOk')}"
+                                  th:text="|Passwords does not match|"></span>
+                        </div>
+                    </div>
+
+                    <input type="submit" class="btn btn-lg btn-primary btn-block" value="Sign In"/>
+
+                </form>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<div th:replace="fragments/footer :: footer"/>
+
+</body>
+</html>

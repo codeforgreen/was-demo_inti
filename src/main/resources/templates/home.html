@@ -1,0 +1,35 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Web Application Security</title>
+
+    <div th:replace="fragments/header :: header-css"/>
+</head>
+<body>
+
+<div th:replace="fragments/header :: header"/>
+
+<div class="container">
+
+    <div class="starter-template">
+        <h1>Web Application Security</h1>
+        <h4>1. Visit <a th:href="@{/admin}">Admin page (Spring Security protected, Need Admin Role)</a></h4>
+        <h4 sec:authorize="hasAuthority('ADMIN')">1. Visible by admin</h4>
+        <h4 sec:authorize="hasAuthority('USER')">1. Visible by User</h4>
+        <h4 th:text="${@environment.getProperty('basic.auth.username')}"/>
+        <h4>2. Visit <a th:href="@{/user}">User page (Spring Security protected, Need User Role)</a></h4>
+        <h4>3. Visit <a th:href="@{/about}">Normal page</a></h4>
+        <h4>4.1 SecuredController <a th:href="@{/deniedByDefault1}">Denied</a></h4>
+        <h4>4.2 SecuredController <a th:href="@{/deniedByDefault2}">Denied</a></h4>
+        <h4>4.2 SecuredController <a th:href="@{/accessible}">Authorized</a></h4>
+        <h4>5 Method Authorization <a th:href="@{/methodAuthorization}">Denied</a></h4>
+        <h4 sec:authorize="isAuthenticated()">6 Registration <a th:href="@{/registration}">New User</a></h4>
+        <h4>7 BasicAuth <a th:href="@{/basicAuthEndpoint}">Special login</a></h4>
+    </div>
+
+</div>
+
+<div th:replace="fragments/footer :: footer"/>
+
+</body>
+</html>
